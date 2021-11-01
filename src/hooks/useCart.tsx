@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
+import { isTemplateTail } from 'typescript';
 import { api } from '../services/api';
 import { Product, Stock } from '../types';
 
@@ -23,6 +24,7 @@ interface CartContextData {
 const CartContext = createContext<CartContextData>({} as CartContextData);
 
 export function CartProvider({ children }: CartProviderProps): JSX.Element {
+  
   const [stock, setStock] = useState<Stock[]>([])
   const [products, setProducts] = useState<Product[]>([])
 
@@ -32,32 +34,48 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
     .then(response => {
       setStock([...stock, response.data])
     })
+    api.get('/products')
+    .then(response => {
+      setProducts([...products, response.data])
+    })
   }, [])
   
 
   const [cart, setCart] = useState<Product[]>(() => {
-     const storagedCart = localStorage.getItem('@RocketShoes:cart', )
+     const storagedCart = localStorage.getItem('@RocketShoes:cart')
 
      if (storagedCart) {
        return JSON.parse(storagedCart);
      }
 
     return [];
+    
   });
 
   const addProduct = async (productId: number) => {
     try {
-      // TODO
+      const newProduct = products.find((item) => {
+        return item.id === productId;
+      }) as Product;
+      setCart([...cart, newProduct]);
+      localStorage.setItem('@RocketShoes:cart', JSON.stringify(cart));
     } catch {
-      // TODO
+
+      toast.error('Erro na adição do produto.');
+
     }
   };
 
   const removeProduct = (productId: number) => {
     try {
-      // TODO
+      setCart(cart.filter((item) => {
+        return item.id === productId;
+      }))
+      localStorage.setItem('@RocketShoes:cart', JSON.stringify(cart))
     } catch {
-      // TODO
+
+      toast.error('Erro na remoção do produto.');
+
     }
   };
 
@@ -66,9 +84,13 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
     amount,
   }: UpdateProductAmount) => {
     try {
-      // TODO
+     const [temp, setTemp] = useState(-1);
+
+        //TODO
     } catch {
-      // TODO
+
+      toast.error('Erro na análise do estoque do produto.');
+
     }
   };
 
