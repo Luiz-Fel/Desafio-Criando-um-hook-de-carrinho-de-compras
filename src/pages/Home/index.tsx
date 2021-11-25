@@ -33,39 +33,45 @@ const Home = (): JSX.Element => {
    }, {} as CartItemsAmount)
 
   useEffect(() => {
-    async function loadProducts() {
-      api.get('/products')
-      .then(response => {
-        setProducts([...products, response.data])
-      })
-    }
+     api.get('products').then((res) => {
+      setProducts(res.data)
+     })
 
-    loadProducts();
   }, []);
 
   function handleAddProduct(id: number) {
     addProduct(id);
   }
 
-  return (
-    <ProductList>
+  function StoreItem(props : ProductFormatted) {
+    return (
       <li>
-        <img src="https://rocketseat-cdn.s3-sa-east-1.amazonaws.com/modulo-redux/tenis1.jpg" alt="Tênis de Caminhada Leve Confortável" />
-        <strong>Tênis de Caminhada Leve Confortável</strong>
-        <span>R$ 179,90</span>
-        <button
-          type="button"
-          data-testid="add-product-button"
-        // onClick={() => handleAddProduct(product.id)}
+            <img src={props.image} alt="" />
+            <strong>{props.title}</strong>
+            <span>{formatPrice(props.price)}</span>
+            <button
+            type="button"
+            data-testid="add-product-button"
+            onClick={() => handleAddProduct(props.id)}
         >
           <div data-testid="cart-product-quantity">
             <MdAddShoppingCart size={16} color="#FFF" />
-            {/* {cartItemsAmount[product.id] || 0} */} 2
+            {cartItemsAmount[props.id] || 0}
           </div>
 
           <span>ADICIONAR AO CARRINHO</span>
         </button>
       </li>
+    )
+  }
+
+  return (
+    <ProductList>
+
+      {products.map((item) => {
+        return <StoreItem priceFormatted={item.priceFormatted} id={item.id} title={item.title} price={item.price} image={item.image} />
+      })}
+      
     </ProductList>
   );
 };
