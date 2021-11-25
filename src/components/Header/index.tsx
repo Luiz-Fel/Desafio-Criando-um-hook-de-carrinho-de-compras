@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { MdShoppingBasket } from 'react-icons/md';
 
@@ -10,22 +10,24 @@ import { access } from 'fs';
 
 const Header = (): JSX.Element => {
   const { cart } = useCart();
-  
-  function sizeFunction() {
-    const [idArray, setIdArray] = useState<Number[]>([])
-    const [counter, setCounter] = useState<number>(0)
-    cart.forEach((item) => {
-      if (idArray.includes(item.id)) {
-        setIdArray([...idArray, item.id])
-        setCounter(counter + 1)
-      } 
+  const [quantityList, useQuantityList]  = useState<Number[]>([])
+  const [quantity, useQuantity] = useState<Number>(0)
+  useEffect(() => {
+    useitensQuantity()
+    useQuantity(quantityList.length)
+  })
+
+
+  function useitensQuantity() {
+    cart.forEach((i) => {
+      useQuantityList([])
+      if (!(quantityList.includes(i.id))) {
+        useQuantityList([...quantityList, i.id])
+      }
     })
-
-
-    return counter
+    return quantityList
   }
 
-  const cartSize = sizeFunction()
   return (
     <Container>
       <Link to="/">
@@ -36,7 +38,7 @@ const Header = (): JSX.Element => {
         <div>
           <strong>Meu carrinho</strong>
           <span data-testid="cart-size">
-            { cartSize === 1 ? `${cartSize} item` : `${cartSize} itens`}
+            { quantity }
           </span>
         </div>
         <MdShoppingBasket size={36} color="#FFF" />
