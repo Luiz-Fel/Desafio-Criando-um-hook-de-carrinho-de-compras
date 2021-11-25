@@ -10,24 +10,7 @@ import { access } from 'fs';
 
 const Header = (): JSX.Element => {
   const { cart } = useCart();
-  const [quantityList, useQuantityList]  = useState<Number[]>([])
-  const [quantity, useQuantity] = useState<Number>(0)
-  useEffect(() => {
-    useitensQuantity()
-    useQuantity(quantityList.length)
-  })
-
-
-  function useitensQuantity() {
-    cart.forEach((i) => {
-      useQuantityList([])
-      if (!(quantityList.includes(i.id))) {
-        useQuantityList([...quantityList, i.id])
-      }
-    })
-    return quantityList
-  }
-
+  const quantity = cart.length
   return (
     <Container>
       <Link to="/">
@@ -38,7 +21,7 @@ const Header = (): JSX.Element => {
         <div>
           <strong>Meu carrinho</strong>
           <span data-testid="cart-size">
-            { quantity }
+            { quantity  === 1 ? `${quantity} item`:`${quantity} itens`}
           </span>
         </div>
         <MdShoppingBasket size={36} color="#FFF" />
