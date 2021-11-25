@@ -46,7 +46,7 @@ const Home = (): JSX.Element => {
   function StoreItem(props : ProductFormatted) {
     return (
       <li>
-            <img src={props.image} alt="" />
+            <img src={props.image} alt={props.title} />
             <strong>{props.title}</strong>
             <span>{formatPrice(props.price)}</span>
             <button
