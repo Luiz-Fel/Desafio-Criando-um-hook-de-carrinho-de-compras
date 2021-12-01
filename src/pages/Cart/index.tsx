@@ -61,9 +61,8 @@ const Cart = (): JSX.Element => {
         </thead>
         <tbody>
           {cart.map((product) => {
-            console.log(cart)
             return(
-            <tr data-testid="product">
+            <tr data-testid="product" key={product.id}>
             <td>
               <img src={product.image} alt={product.title} />
             </td>

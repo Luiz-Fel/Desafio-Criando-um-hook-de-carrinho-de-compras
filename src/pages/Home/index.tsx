@@ -69,7 +69,7 @@ const Home = (): JSX.Element => {
     <ProductList>
 
       {products.map((item) => {
-        return <StoreItem priceFormatted={item.priceFormatted} id={item.id} title={item.title} price={item.price} image={item.image} />
+        return <StoreItem key={item.id} priceFormatted={item.priceFormatted} id={item.id} title={item.title} price={item.price} image={item.image} />
       })}
       
     </ProductList>
